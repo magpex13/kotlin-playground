@@ -24,8 +24,38 @@ fun getDescription(color: Color): String =
     }
 
 data class Contact(val name: String, val address: String)
-
 class Foo(val first: Int, val second: Int)
+
+//Sealed class - similar to "interface" but in the same file
+sealed class Expr
+class Num(val value: Int): Expr()
+class Sum(val left: Expr, val right: Expr): Expr()
+
+fun eval(e: Expr): Int = when(e) {
+    is Num -> e.value
+    is Sum -> eval(e.left) + eval(e.right)
+}
+
+//Class delegation
+class Customer
+
+interface Repository {
+    fun getById(id: Int): Customer
+    fun getAll(): List<Customer>
+}
+
+interface Logger {
+    fun logAll()
+}
+
+class Controller(
+    repository: Repository,
+    logger: Logger
+): Repository by repository, Logger by logger
+
+fun use(controller: Controller) {
+    controller.logAll()
+}
 
 fun main(){
     println(getDescription(ORANGE))
@@ -42,4 +72,6 @@ fun main(){
     val c1 = Contact("cone1", "a")
     val c2 = Contact("cone1", "a")
     println(c1 == c2) //true
+
+    println(eval(Sum(Num(5), Num(10))))
 }
