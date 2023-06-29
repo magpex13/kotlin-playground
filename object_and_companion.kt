@@ -1,6 +1,6 @@
 //Singleton in Kotlin
 object User {
-    val name: String = "Cone"
+    val name: String = "Cone" //User.INSTANCE.getName()
 }
 
 interface TestInterface1<T> {
